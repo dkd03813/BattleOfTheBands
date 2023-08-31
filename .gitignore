@@ -1,0 +1,61 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dependency directories
+pids/
+logs/
+results/
+*.pid
+*.log
+
+# Environment variables
+.env
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/
+
+# Compiled output
+dist/
+build/
+
+# Testing
+coverage/
+
+# Editor-specific files
+*.sublime-project
+*.sublime-workspace
+*.idea/
+*.vscode/
+
+# Yarn
+yarn.lock
+
+# Logs
+logs
+*.log
+
+# Debugging
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache
+node_modules
+.npm
+.pnp
+.pnp.js
+
+# Optional: Exclude sensitive or environment-specific config files
+# config.js
+# production-config.js
