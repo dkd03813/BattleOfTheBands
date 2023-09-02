@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "cpitywkn",
+    "password": "Myt-Cgouj_2GP62FlkculvBhAbDyTLwi",
+    "database": "cpitywkn",
+    "host": "rajje.db.elephantsql.com",
+    "dialect": "postgres"
+  },
+  "test": {
+    "username": "cpitywkn",
+    "password": "Myt-Cgouj_2GP62FlkculvBhAbDyTLwi",
+    "database": "cpitywkn",
+    "host": "rajje.db.elephantsql.com",
+    "dialect": "postgres"
+  },
+  "production": {
+    "username": "cpitywkn",
+    "password": "Myt-Cgouj_2GP62FlkculvBhAbDyTLwi",
+    "database": "cpitywkn",
+    "host": "rajje.db.elephantsql.com",
+    "dialect": "postgres"
+  }
+}

@@ -5,11 +5,17 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import './index.css'
 import Index from './Components/Index.jsx';
 import Login from './Components/Login.jsx';
+import Create from './Components/Create';
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Index/>
+
+  },
+  {
+    path: "/create",
+    element: <Create/>
 
   },
   {
