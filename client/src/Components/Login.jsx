@@ -2,17 +2,14 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Login() {
-  
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
   const navigate = useNavigate();
 
   const userLogin = async (e) => {
     e.preventDefault();
-  
+
     try {
-      console.log("in the try");
       const response = await fetch('http://localhost:3000/login', {
         method: 'POST',
         headers: {
@@ -20,33 +17,25 @@ export default function Login() {
         },
         body: JSON.stringify({ username, password }),
       });
-  
-      // Log the response status
-      console.log('Response status:', response.status);
-  
-      // Parse the JSON response
-      const data = await response.json();
-      console.log('Response data:', data);
-  
-      // Check if the request was successful
+
       if (response.ok) {
-        // Check if login was successful
+        const data = await response.json();
         if (data.success) {
           console.log('User successfully logged in');
-          // Redirect to the home page on successful login
+          const token = data.token;
+          localStorage.setItem('token', token); // Store the token with "Bearer " prefix
+          localStorage.setItem('userId', data.user.id); 
           navigate('/game');
         } else {
           console.log('User login failed');
         }
       } else {
-        console.error('POST request failed'); // Log an error if the request fails
+        console.error('POST request failed');
       }
     } catch (error) {
       console.error('Error:', error);
     }
   };
-  
-  
 
   return (
     <div>
@@ -82,6 +71,8 @@ export default function Login() {
     </div>
   );
 }
+
+
 
 
 

@@ -5,40 +5,88 @@
 // Band button should only show up after the user has selected either create new save or load previously existing save, two buttons that are on the GameStart component
 
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function NavBar() {
-  const { id } = useParams(); // Get the userId from the route parameter
-  const [user, setUser] = useState(null); // State to store user data
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null); // Add token state
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Perform logout actions (e.g., clear user token)
+    localStorage.removeItem('token');
+    setToken(null); // Clear token from state
+    // Redirect to the login page after logout
+    navigate('/login');
+  };
 
   useEffect(() => {
-    // Fetch user data based on the userId when the component mounts
-    fetch(`http://localhost:3000/game/user/${id}`)
-      .then((response) => response.json())
-      .then((data) => setUser(data))
-      .catch((error) => console.error('Error fetching user data:', error));
-  }, [id]); // Trigger the fetch when the userId changes
+    const userId = localStorage.getItem('userId');
+    const storedToken = localStorage.getItem('token'); // Retrieve token from local storage
+
+    if (userId && storedToken) {
+      // Fetch user data based on the user ID when the component mounts
+      fetch(`http://localhost:3000/game/user/${userId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${storedToken}`, // Include the token in the headers
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            return response.json();
+          } else {
+            throw new Error('Request failed');
+          }
+        })
+        .then((data) => {
+          setUser(data);
+          setToken(storedToken); // Store token in component state
+        })
+        .catch((error) => console.error('Error fetching user data:', error));
+    }
+  }, []); // The empty dependency array ensures it runs only once on mount
 
   return (
-    <nav>
-      <ul>
-        <li>
+    <nav className="navbar">
+      <ul className="navbar-list">
+        <li className="navbar-item">
           <Link to="/">Home</Link>
         </li>
-        <li>
-          <Link to={`/game/user/${id}`}>Account</Link>
+        <li className="navbar-item">
+          {/* Fetch user data when the "Account" link is clicked */}
+          <Link
+            to={`/game/user/${localStorage.getItem('userId')}`}
+            onClick={() => {
+              const userId = localStorage.getItem('userId');
+              if (userId && token) {
+                // Fetch user data based on the user ID when the link is clicked
+                fetch(`http://localhost:3000/game/user/${userId}`, {
+                  method: 'GET',
+                  headers: {
+                    'Authorization': `Bearer ${token}`, // Include the token in the headers
+                    'Content-Type': 'application/json',
+                  },
+                })
+                  .then((response) => response.json())
+                  .then((data) => setUser(data))
+                  .catch((error) => console.error('Error fetching user data:', error));
+              }
+            }}
+          >
+            Account
+          </Link>
+        </li>
+        <li className="navbar-item">
+          <button className="logout-button" onClick={handleLogout}>
+            Logout
+          </button>
         </li>
         {/* Add more navigation items as needed */}
       </ul>
-
-      {user && (
-        <div>
-          <h2>User Account</h2>
-          <p>User ID: {user.id}</p>
-          <p>Username: {user.username}</p>
-          {/* Display other user account details */}
-        </div>
-      )}
     </nav>
   );
 }
+
+
