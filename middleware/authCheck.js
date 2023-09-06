@@ -1,27 +1,35 @@
-const jwt = require("jsonwebtoken");
-// Authentification for log in, to give them a token or not and have access to webpage
-const authCheck = (req,res, next) => {
-    const token = req.cookies.token;
-//Verify JWT
-// If JWT is valid, then next
-// if not then show error
-console.log('Auth check middleware has fired', token)
-let decoded = null
-try {
-    decoded = jwt.verify(token,"superSecretPrivateKey")
-    console.log(decoded)
-} catch (error) {
-    console.log(error)
-}
-    if (decoded) {
-        
-        //If the user is decoded (user is in the database), then save the id of that user so that they can access stuff on the site
-        req.user = {id:decoded.foo}
-        next()
-    } else {
-        res.render("login" , {title: "You must login to view your account"})
+const jwt = require('jsonwebtoken');
+
+
+const authCheck = (req, res, next) => {
+    // Retrieve the token from the request headers
+    const token = req.headers.authorization;
+
+    console.log('Token in authCheck middleware:', token);
+  
+    if (!token) {
+      return res.status(401).json({ error: "Unauthorized" });
     }
-}
-module.exports = {
-    authCheck
-}
+  
+    try {
+      // Ensure that the token starts with "Bearer "
+      if (!token.startsWith("Bearer ")) {
+        throw new Error("Invalid token format");
+      }
+  
+      // Remove the "Bearer " prefix
+      const tokenWithoutPrefix = token.slice(7); // Removes "Bearer "
+      
+      const decoded = jwt.verify(tokenWithoutPrefix, "superSecretPrivateKey");
+      req.user = { id: decoded.id };
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(401).json({ error: "Unauthorized" });
+    }
+  };
+  
+  module.exports = {
+    authCheck,
+  };
+  
