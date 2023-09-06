@@ -16,7 +16,7 @@ try {
     if (decoded) {
         
         //If the user is decoded (user is in the database), then save the id of that user so that they can access stuff on the site
-        req.user = {id:decoded.foo}
+        req.user = {id:decoded.id}
         next()
     } else {
         res.render("login" , {title: "You must login to view your account"})

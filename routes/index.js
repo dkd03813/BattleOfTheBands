@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
     const result = await bcrypt.compare(password, hashPassword);
 
     if (result) {
-      const token = jwt.sign({ foo: userID }, "superSecretPrivateKey", {
+      const token = jwt.sign({ id: userID }, "superSecretPrivateKey", {
         expiresIn: "1h",
       });
       console.log("Password:", password);
@@ -71,5 +71,35 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
+
+//route for handling the edit of a user's account
+
+router.get("/game/user/:id", async (req, res) =>  {
+const { id } = req.params;
+try {
+  // Find the user by their ID
+  const user = await User.findByPk(id);
+  if (!user) {
+    res.status(404).json({ error: 'User not found' });
+    return;
+  }
+  // Extract user profile information
+  const userProfile = {
+    id: user.id,
+    username: user.username,
+    // Add other profile information here if needed
+  };
+  res.status(200).json(userProfile);
+} catch (error) {
+  console.error('Error fetching user profile by ID:', error);
+  res.status(500).json({ error: 'Could not fetch user profile' });
+}
+});
+
+router.post("/game/user/:id", authCheck.authCheck,findProfile.findProfile, (req, res) => {
+  const { username, id, password } = req.user;
+  res.status(200).json({ success: true, user: { username, id, password } });
+});
+
 
 module.exports = router;

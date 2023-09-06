@@ -6,6 +6,9 @@ import './index.css'
 import Index from './Components/Index.jsx';
 import Login from './Components/Login.jsx';
 import Create from './Components/Create';
+import NavBar from './Components/NavBar';
+import GameStart from './Components/GameStart';
+import Account from './Components/Account';
 
 const router = createBrowserRouter([
   {
@@ -21,6 +24,20 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login/>
+  },
+  {
+    path: "/game",
+    element: <NavBar/>,
+    children: [
+      {
+        index: true,
+        element: <GameStart/>
+      },
+      {
+        path: "user/:id",
+        element: <Account/>
+      }
+    ]
   }
 ])
 

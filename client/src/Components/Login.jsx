@@ -34,7 +34,7 @@ export default function Login() {
         if (data.success) {
           console.log('User successfully logged in');
           // Redirect to the home page on successful login
-          navigate('/');
+          navigate('/game');
         } else {
           console.log('User login failed');
         }
