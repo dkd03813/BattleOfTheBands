@@ -106,5 +106,35 @@ router.post("/game/user/:id", authCheck.authCheck,findProfile.findProfile, (req,
   res.status(200).json({ success: true, user: { username, id, password } });
 });
 
+//handle the edit of a user at a certain id
+// Import necessary modules and middleware
+
+router.post("/game/user/edit/:id", authCheck.authCheck, findProfile.findProfile, async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { username, password } = req.body;
+
+    // Find the profile by ID
+    const profile = req.foundProfile; // Assuming findProfile middleware sets this
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found for ID: " + id });
+    }
+
+    // Update the profile fields
+    profile.username = username;
+    // Hash the password here (you can use bcrypt or another library)
+    // Example: profile.password = await bcrypt.hash(password, 10);
+
+    // Save the updated profile
+    await profile.save();
+
+    return res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+});
+
 
 module.exports = router;

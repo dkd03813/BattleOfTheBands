@@ -5,7 +5,7 @@
 // Band button should only show up after the user has selected either create new save or load previously existing save, two buttons that are on the GameStart component
 
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Outlet } from 'react-router-dom';
 
 export default function NavBar() {
   const [user, setUser] = useState(null);
@@ -49,6 +49,7 @@ export default function NavBar() {
   }, []); // The empty dependency array ensures it runs only once on mount
 
   return (
+    <>
     <nav className="navbar">
       <ul className="navbar-list">
         <li className="navbar-item">
@@ -86,6 +87,8 @@ export default function NavBar() {
         {/* Add more navigation items as needed */}
       </ul>
     </nav>
+    <Outlet/>
+    </>
   );
 }
 
