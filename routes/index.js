@@ -114,8 +114,8 @@ router.post("/game/user/edit/:id", authCheck.authCheck, findProfile.findProfile,
     const id = req.params.id;
     const { username, password } = req.body;
 
-    // Find the profile by ID
-    const profile = req.foundProfile; // Assuming findProfile middleware sets this
+    // Use req.user instead of req.foundProfile
+    const profile = req.user;
 
     if (!profile) {
       return res.status(404).json({ message: "Profile not found for ID: " + id });
@@ -135,6 +135,33 @@ router.post("/game/user/edit/:id", authCheck.authCheck, findProfile.findProfile,
     return res.status(500).json({ message: "Internal server error" });
   }
 });
+
+router.post("/game/user/delete/:id", authCheck.authCheck,findProfile.findProfile, async (req,res) => {
+  try {
+    const id = req.params.id;
+    const { username } = req.body;
+
+    // Use req.user instead of req.foundProfile
+    const profile = req.user;
+
+    if (!profile) {
+      return res.status(404).json({ message: "Profile not found for ID: " + id });
+    }
+
+    // Update the profile fields
+    profile.username = username;
+    // Hash the password here (you can use bcrypt or another library)
+    // Example: profile.password = await bcrypt.hash(password, 10);
+
+    // Save the updated profile
+    await profile.destroy();
+
+    return res.status(200).json({ message: "Profile updated successfully" });
+  } catch (error) {
+    console.error("Error updating user data:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+})
 
 
 module.exports = router;

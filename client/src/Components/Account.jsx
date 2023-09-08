@@ -73,6 +73,36 @@ export default function Account() {
       });
   };
 
+  const handleDeleteClick = () => {
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      console.error('Token not found in local storage');
+      return;
+    }
+
+    if (window.confirm('Are you sure you want to delete your account?')) {
+      fetch(`http://localhost:3000/game/user/delete/${id}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log('User account deleted successfully');
+            // Perform any necessary actions after deletion, e.g., redirect to a different page
+          } else {
+            throw new Error('Request failed');
+          }
+        })
+        .catch((error) => {
+          console.error('Error deleting user account:', error);
+        });
+    }
+  };
+
   console.log('Rendering Account component with ID:', id);
 
   return (
@@ -103,7 +133,7 @@ export default function Account() {
       <button onClick={handleEditClick}>
         {isEditing ? 'Cancel Edit' : 'Edit Account'}
       </button>
-      <button>Delete Account</button>
+      <button onClick={handleDeleteClick}>Delete Account</button>
     </div>
   );
 }
