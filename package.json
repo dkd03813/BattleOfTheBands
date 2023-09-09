@@ -26,5 +26,12 @@
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.32.1",
     "sequelize-cli": "^6.6.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.29",
+    "prettier": "^3.0.3",
+    "prettier-plugin-tailwindcss": "^0.5.4",
+    "tailwindcss": "^3.3.3"
   }
 }
