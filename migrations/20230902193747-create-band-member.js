@@ -16,13 +16,15 @@ module.exports = {
         type: Sequelize.STRING
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.BLOB, 
+        allowNull: false,
       },
       archetype: {
         type: Sequelize.STRING
       },
       archetypeDes: {
-        type: Sequelize.STRING
+        type: Sequelize.TEXT, 
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
