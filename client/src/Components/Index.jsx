@@ -5,13 +5,17 @@ export default function Index() {
       return (
         <div className="group">
           <section className="h-screen bg-orange-100 flex items-center justify-center m-12 text-center text-3xl text-cyan-600">
-          <h1>Welcome to our Oregon-Trail inspired Game!</h1>
+            <ul className="list-none">
+          <li><h1>Welcome to our Oregon-Trail inspired Game!</h1>
           <Link to="/create"> 
             <button>Create Account</button>
-          </Link> 
+          </Link></li>
+          <li>
           <Link to="/login">
             <button>Login</button>
-          </Link>  
+          </Link>
+          </li>
+          </ul>  
           </section>
         </div>
       );
