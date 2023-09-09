@@ -5,6 +5,7 @@ const fs = require("fs");
 const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 const { User } = require("../models");
+const { BandMember } = require('../models');
 const findProfile = require("../middleware/findProfile");
 const authCheck = require("../middleware/authCheck");
 
@@ -72,6 +73,18 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.error("Error:", error);
     res.status(500).json({ error: "Server error" });
+  }
+});
+
+//route for displaying the band members on the game start component for users to select from
+
+router.get('/game', async (req, res) => {
+  try {
+    const bandMembers = await BandMember.findAll();
+    res.json(bandMembers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

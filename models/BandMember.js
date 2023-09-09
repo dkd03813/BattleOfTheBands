@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
   BandMember.init({
     name: DataTypes.STRING,
     type: DataTypes.STRING,
-    image: DataTypes.STRING,
+    image: DataTypes.BLOB,
     archetype: DataTypes.STRING,
     archetypeDes: DataTypes.STRING
   }, {

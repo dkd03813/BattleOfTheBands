@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 export default function Account() {
   const { id } = useParams();
@@ -134,6 +134,9 @@ export default function Account() {
         {isEditing ? 'Cancel Edit' : 'Edit Account'}
       </button>
       <button onClick={handleDeleteClick}>Delete Account</button>
+      <Link to="/game">
+          <button>Back</button>
+        </Link>
     </div>
   );
 }
