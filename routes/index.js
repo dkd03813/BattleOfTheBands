@@ -6,8 +6,10 @@ const jwt = require("jsonwebtoken");
 const saltRounds = 10;
 const { User } = require("../models");
 const { BandMember } = require('../models');
+const {UserSave} = require("../models")
 const findProfile = require("../middleware/findProfile");
 const authCheck = require("../middleware/authCheck");
+const { Op } = require('sequelize');
 
 router.post("/create", async (req, res) => {
   console.log("Received POST request to /api/create");
@@ -87,6 +89,40 @@ router.get('/game', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+//this route is to handle creating the association between the user that is logged in and the band members that the user has selected
+
+router.post('/save', async (req, res) => {
+  try {
+    const { userID, bandMemberIDs, bandName } = req.body;
+
+    // Create a separate entry in UserSaves for each selected band member
+    await Promise.all(
+      bandMemberIDs.map(async (bandMemberID) => {
+        // Fetch the selected band member
+        const selectedBandMember = await BandMember.findByPk(bandMemberID);
+
+        // Create an entry in UserSaves with the selected band member's data
+        const userSavesRecord = {
+          userID,
+          bandMemberID,
+          money: 0, // You can set the initial money value here
+          members: selectedBandMember.name, // Include the selected band member's name
+          bandName, // Include the user's entered band name
+        };
+
+        // Insert the record into the UserSaves table
+        await UserSave.create(userSavesRecord);
+      })
+    );
+
+    res.status(200).json({ message: 'Data saved successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 
 //route for handling the edit of a user's account
