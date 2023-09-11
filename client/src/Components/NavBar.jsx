@@ -50,12 +50,14 @@ export default function NavBar() {
 
   return (
     <>
-    <nav className="navbar">
-      <ul className="navbar-list">
-        <li className="navbar-item">
-          <Link to="/">Home</Link>
+    <nav className="navbar bg-gray-900">
+      <ul className="navbar-list flex">
+        <li className="navbar-item flex-1 mx-6 my-6">
+          <Link to="/">
+            <button className="bg-gray-600 hover:bg-gray-400 text-gray-100 font-mono py-2 px-4 rounded-full">Home</button>
+            </Link>
         </li>
-        <li className="navbar-item">
+        <li className="navbar-item mx-6 my-6">
           {/* Fetch user data when the "Account" link is clicked */}
           <Link
             to={`/game/user/${localStorage.getItem('userId')}`}
@@ -76,11 +78,11 @@ export default function NavBar() {
               }
             }}
           >
-            Account
+            <button className="bg-gray-600 hover:bg-gray-400 text-gray-100 font-mono py-2 px-4 rounded-full">Account</button>
           </Link>
         </li>
-        <li className="navbar-item">
-          <button className="logout-button" onClick={handleLogout}>
+        <li className="navbar-item mx-6 my-6">
+          <button className="bg-gray-600 hover:bg-gray-400 text-gray-100 font-mono py-2 px-4 rounded-full" onClick={handleLogout}>
             Logout
           </button>
         </li>

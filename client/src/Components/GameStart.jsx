@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import img from "../assets/JonBohnam.png"
+import "../index.css";
 
 export default function GameStart() {
   const imageFolderPath = '/src/assets';
@@ -39,6 +40,7 @@ export default function GameStart() {
   };
 
   const gameNameStyle = {
+    fontFamily: 'mono',
     fontSize: '24px',
     marginBottom: '20px',
   };
@@ -48,10 +50,12 @@ export default function GameStart() {
     gap: '20px',
   };
 
+
   const buttonStyle = {
     padding: '10px 20px',
+    fontFamily: 'courier',
     fontSize: '16px',
-    backgroundColor: '#007bff',
+    backgroundColor: '#279EFF',
     color: 'white',
     border: 'none',
     borderRadius: '5px',
@@ -68,10 +72,16 @@ export default function GameStart() {
   };
 
   return (
+    <div className="bg-gray-900">
+        {/* Here's the music. If you delete "control" it will autoplay with no controls, that is another option. */}
+      <audio className="mx-12" controls autoPlay>
+        <source src={`${imageFolderPath}/8bit-music.mp3`} type="audio/mp3"></source>
+        </audio>
     <div style={containerStyle}>
-      <h1 style={gameNameStyle}>Your Game Name</h1>
+      <h1 className="mx-12 my-6 text-white">Highway to Harmony</h1>
       {showForm ? (
-        <form style={buttonContainerStyle}>
+        <form>
+          <ul className="flex">
           {bandMembers.map((bandMember) => (
             <div className="card" style={{ width: '18rem', margin: '10px' }} key={bandMember.id}>
               <img src={`${imageFolderPath}/${bandMember.name.replace(/\s+/g, '')}.png`} className="card-img-top" alt={bandMember.name} />
@@ -83,18 +93,20 @@ export default function GameStart() {
               </div>
             </div>
           ))}
-          <button style={buttonStyle}>Submit</button>
+          </ul>
+          <button style={buttonStyle}><h1>Submit</h1></button>
         </form>
       ) : (
         <div style={buttonContainerStyle}>
-          <button style={buttonStyle} onClick={startGameClickHandler}>
-            Start Game
+          <button className="bg-blue-500 hover:bg-blue-300 text-white font-mono py-2 px-4 rounded-full" onClick={loadPreviousGameClickHandler}>
+            <h1>Load Previous Game</h1>
           </button>
-          <button style={buttonStyle} onClick={loadPreviousGameClickHandler}>
-            Load Previous Game
+          <button className="bg-blue-700 hover:bg-blue-900 text-white py-2 px-4 rounded-full" onClick={startGameClickHandler}>
+           <h1>Start Game</h1>
           </button>
         </div>
       )}
+    </div>
     </div>
   );
 }

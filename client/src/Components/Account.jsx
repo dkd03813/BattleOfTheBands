@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import "../index.css";
+
+const buttonContainerStyle = {
+  display: 'flex',
+  gap: '20px',
+};
 
 export default function Account() {
   const { id } = useParams();
@@ -106,8 +112,8 @@ export default function Account() {
   console.log('Rendering Account component with ID:', id);
 
   return (
-    <div>
-      <h2>User Account</h2>
+    <div className="my-12 mx-12">
+      <h1>User Account</h1>
       {isEditing ? (
         <div>
           <label htmlFor="editedUsername">Username:</label>
@@ -120,7 +126,8 @@ export default function Account() {
               setEditedUser((prevUser) => ({ ...prevUser, username: e.target.value }))
             }
           />
-          <button onClick={handleFormSubmit}>Save Changes</button>
+          <div style={buttonContainerStyle}>
+          <button onClick={handleFormSubmit} className="bg-blue-900 hover:bg-blue-700 text-white font-mono py-2 px-4 rounded-full">Save Changes</button></div>
         </div>
       ) : user ? (
         <div>
@@ -130,13 +137,15 @@ export default function Account() {
       ) : (
         <p>Loading user data...</p>
       )}
-      <button onClick={handleEditClick}>
+        <div style={buttonContainerStyle}>
+        <Link to="/game">
+          <button className="bg-gray-700 hover:bg-gray-500 text-gray-100 py-2 px-4 rounded-full">Back</button>
+        </Link>
+      <button onClick={handleEditClick} className="bg-gray-900 hover:bg-gray-500 text-white font-mono py-2 px-4 rounded-full">
         {isEditing ? 'Cancel Edit' : 'Edit Account'}
       </button>
-      <button onClick={handleDeleteClick}>Delete Account</button>
-      <Link to="/game">
-          <button>Back</button>
-        </Link>
+        <button onClick={handleDeleteClick} className="bg-gray-400 hover:bg-red-500 text-white py-2 px-4 rounded-full">Delete Account</button>
+    </div>
     </div>
   );
 }
