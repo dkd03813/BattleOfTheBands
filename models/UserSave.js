@@ -28,6 +28,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserSave.init({
+    bandName: {
+      type: DataTypes.STRING
+    },
     userID: {
       type: DataTypes.INTEGER,
       references: {
