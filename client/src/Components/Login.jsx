@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+const buttonContainerStyle = {
+ display: 'flex',
+ gap: '20px',
+ padding: '10px',
+ margin: '10px',
+};
+
 export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+
 
   const userLogin = async (e) => {
     e.preventDefault();
@@ -36,38 +44,51 @@ export default function Login() {
       console.error('Error:', error);
     }
   };
-
+ 
   return (
     <div>
-      <h1>Login</h1>
+      <section className="h-screen font-mono bg-gray-900 flex items-center justify-center text-center text-3xl">
+      <ul className="list-none">
+      <li><h1 className="text-white">Login</h1></li>
       <form>
+        <li>
         <div>
-          <label htmlFor="username">Username:</label>
+          <label htmlFor="username" className="text-white"><h1>Username:</h1></label>
           <input
             type="text"
             id="username"
             placeholder="Username"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-          />
+            />
         </div>
+            </li>
+            <li>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password" className="text-white"><h1>Password:</h1></label>
           <input
             type="password"
             id="password"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-          />
+            />
         </div>
-        <button type="submit" onClick={userLogin}>
-          Enter
-        </button>
+            </li>
+            <form style={buttonContainerStyle}>
+            <li className="text-decoration: none">
         <Link to="/">
-          <button>Back</button>
+          <button className="bg-gray-700 hover:bg-blue-100 text-blue-400 py-2 px-4 rounded-full"><h1>Back</h1></button>
         </Link>
+            </li>
+            <li>
+        <button type="submit" onClick={userLogin} className="bg-blue-500 hover:bg-blue-700 text-white  py-2 px-4 rounded-full"><h1>Enter</h1>
+        </button>
+            </li>
+            </form>
       </form>
+            </ul>
+    </section>
     </div>
   );
 }
