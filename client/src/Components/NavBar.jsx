@@ -54,7 +54,7 @@ export default function NavBar() {
       <ul className="navbar-list flex">
         <li className="navbar-item flex-1 mx-6 my-6">
           <Link to="/">
-            <button className="bg-gray-600 hover:bg-gray-400 text-gray-100 font-mono py-2 px-4 rounded-full">Home</button>
+            <button className="bg-gray-900 hover:bg-indigo-400 hover:text-gray-900 text-gray-100 py-2 px-4 rounded-full"><h1>Home</h1></button>
             </Link>
         </li>
         <li className="navbar-item mx-6 my-6">
@@ -78,12 +78,12 @@ export default function NavBar() {
               }
             }}
           >
-            <button className="bg-gray-600 hover:bg-gray-400 text-gray-100 font-mono py-2 px-4 rounded-full">Account</button>
+            <button className="bg-gray-900 hover:bg-orange-400 hover:text-gray-900 text-gray-100 py-2 px-4 rounded-full"><h1>My Account</h1></button>
           </Link>
         </li>
         <li className="navbar-item mx-6 my-6">
-          <button className="bg-gray-600 hover:bg-gray-400 text-gray-100 font-mono py-2 px-4 rounded-full" onClick={handleLogout}>
-            Logout
+          <button className="bg-gray-900 hover:bg-red-400 hover:text-gray-900 text-gray-100 py-2 px-4 rounded-full" onClick={handleLogout}>
+            <h1>Logout</h1>
           </button>
         </li>
         {/* Add more navigation items as needed */}

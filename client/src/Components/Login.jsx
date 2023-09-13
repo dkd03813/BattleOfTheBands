@@ -78,7 +78,7 @@ export default function Login() {
             <form style={buttonContainerStyle}>
             <li className="text-decoration: none">
         <Link to="/">
-          <button className="bg-gray-700 hover:bg-blue-100 text-blue-400 py-2 px-4 rounded-full"><h1>Back</h1></button>
+          <button className="bg-gray-700 hover:bg-blue-100 hover:text-gray-700 text-blue-300 py-2 px-4 rounded-full"><h1>Back</h1></button>
         </Link>
             </li>
             <li>
