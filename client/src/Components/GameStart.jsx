@@ -166,9 +166,10 @@ export default function GameStart() {
     </div>
   </div>
 ))}
-            </ul>
-            <button className="btn btn-primary mt-3" onClick={submitForm}>
-              Submit
+</ul>
+
+            <button className="btn btn-primary mt-3 float-right w-50 " onClick={submitForm}>
+              <h1>Submit</h1>
             </button>
           </form>
         ) : (
