@@ -147,39 +147,31 @@ export default function GameStart() {
               />
             </div>
             <ul className="flex">
-              {bandMembers.map((bandMember) => (
-                <div
-                  className={`card ${
-                    bandMember.isSelected ? "bg-primary text-white" : ""
-                  }`}
-                  style={{
-                    width: "18rem",
-                    margin: "10px",
-                    cursor: "pointer",
-                  }}
-                  key={bandMember.id}
-                  onClick={() => toggleSelection(bandMember.id)}
-                >
-                  <img
-                    src={`${imageFolderPath}/${bandMember.name.replace(
-                      /\s+/g,
-                      ""
-                    )}.png`}
-                    className="card-img-top"
-                    alt={bandMember.name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{bandMember.name}</h5>
-                    <p className="card-text">{bandMember.type}</p>
-                    <p className="card-text">Member ID: {bandMember.id}</p>
-                    <p className="card-text">{bandMember.archetype}</p>
-                    <p className="card-text">{bandMember.archetypeDes}</p>
-                  </div>
-                </div>
-              ))}
-            </ul>
-            <button className="btn btn-primary mt-3" onClick={submitForm}>
-              Submit
+            {bandMembers.map((bandMember) => (
+  <div
+    className={`card ${bandMember.isSelected ? 'bg-primary text-white' : ''}`}
+    style={{ width: '18rem', margin: '10px', cursor: 'pointer' }}
+    key={bandMember.id}
+    onClick={() => toggleSelection(bandMember.id)}
+  >
+    <img
+      src={`${imageFolderPath}/${bandMember.name.replace(/\s+/g, '')}.png`}
+      className="card-img-top"
+      alt={bandMember.name}
+    />
+    <div className="card-body">
+      <h5 className="card-title">{bandMember.name}</h5>
+      <p className="card-text">{bandMember.type}</p>
+      <p className="card-text">Member ID: {bandMember.id}</p>
+      <p className="card-text">{bandMember.archetype}</p>
+      <p className="card-text">{bandMember.archetypeDes}</p>
+    </div>
+  </div>
+))}
+</ul>
+
+            <button className="btn btn-primary mt-3 float-right w-50 " onClick={submitForm}>
+              <h1>Submit</h1>
             </button>
           </form>
         ) : (
