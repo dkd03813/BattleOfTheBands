@@ -21,6 +21,9 @@ module.exports = {
       money: {
         type: Sequelize.INTEGER
       },
+      cred: {
+        type: Sequelize.INTEGER
+      },
       members: {
         type: Sequelize.STRING
       },
