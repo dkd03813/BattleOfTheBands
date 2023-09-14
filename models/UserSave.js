@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     money: DataTypes.INTEGER,
+    cred: DataTypes.INTEGER,
     members: DataTypes.STRING
   }, {
     sequelize,

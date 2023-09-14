@@ -14,9 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Events.init({
-    eventName: DataTypes.STRING,
+    eventType: DataTypes.STRING,
+    eventTitle: DataTypes.STRING,
     eventDetails: DataTypes.STRING,
-    eventResult: DataTypes.INTEGER
+    eventMoney: DataTypes.INTEGER,
+    eventCred: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Events',

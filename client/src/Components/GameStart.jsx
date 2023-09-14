@@ -17,6 +17,7 @@ export default function GameStart() {
   // When fetching band members, add the 'isSelected' property
   const fetchBandMembers = async () => {
     try {
+      
       const response = await fetch("http://localhost:3000/game");
       if (!response.ok) {
         throw new Error("Network response was not ok");
