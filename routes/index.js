@@ -212,5 +212,26 @@ router.post("/game/user/delete/:id", authCheck.authCheck,findProfile.findProfile
   }
 })
 
+//route responsible for dispalying the members of hte band based off of 
+
+router.get("/game/main/:bandName", async (req, res) => {
+  try {
+    const bandName = req.params.bandName; // Retrieve bandName from URL params
+
+    // Perform a database query here to fetch band members based on bandName
+    // Replace this with your actual database query logic
+    const bandMembers = await UserSave.findAll({
+      where: {
+        bandName: bandName,
+      },
+    });
+
+    res.json(bandMembers);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 module.exports = router;

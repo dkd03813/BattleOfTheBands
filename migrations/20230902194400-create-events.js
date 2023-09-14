@@ -9,13 +9,19 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      eventName: {
+      eventType: {
+        type: Sequelize.STRING
+      },
+      eventTitle: {
         type: Sequelize.STRING
       },
       eventDetails: {
         type: Sequelize.STRING
       },
-      eventResult: {
+      eventMoney: {
+        type: Sequelize.INTEGER
+      },
+      eventCred: {
         type: Sequelize.INTEGER
       },
       createdAt: {

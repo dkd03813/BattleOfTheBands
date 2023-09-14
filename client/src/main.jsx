@@ -9,6 +9,7 @@ import Create from './Components/Create';
 import NavBar from './Components/NavBar';
 import GameStart from './Components/GameStart';
 import Account from './Components/Account';
+import GamePage from './Components/GamePage';
 
 
 const router = createBrowserRouter([
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: 'user/:id',
         element: <Account />
+      }, 
+      {
+        path: "main/:bandName",
+        element: <GamePage/>
       }
     ]
   }

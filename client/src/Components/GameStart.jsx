@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import img from "../assets/JonBohnam.png";
@@ -16,6 +17,7 @@ export default function GameStart() {
   // When fetching band members, add the 'isSelected' property
   const fetchBandMembers = async () => {
     try {
+      
       const response = await fetch("http://localhost:3000/game");
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -32,6 +34,8 @@ export default function GameStart() {
       console.error(error);
     }
   };
+
+  const navigate = useNavigate(); // Initialize the useNavigate hook
 
   const toggleSelection = (bandMemberID) => {
     setBandMembers((prevMembers) =>
@@ -52,34 +56,43 @@ export default function GameStart() {
 
   const submitForm = async (e) => {
     e.preventDefault();
-
-    // Get the User ID from local storage
-    const userID = localStorage.getItem("userId");
-    console.log(userID);
-
-    // Create a request body with the collected data, including band name and bandMemberIDs as an array
-    const requestBody = {
-      userID,
-      bandMemberIDs, // Include the user's selected band member IDs as an array
-      bandName, // Include the user's entered band name
-    };
-
-    try {
-      const response = await fetch("http://localhost:3000/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
+  
+    // Check if the user has selected four band members and provided a band name
+    if (bandMemberIDs.length === 4 && bandName.trim() !== "") {
+      // Get the User ID from local storage
+      const userID = localStorage.getItem("userId");
+  
+      // Create a request body with the collected data, including band name and bandMemberIDs as an array
+      const requestBody = {
+        userID,
+        bandMemberIDs, // Include the user's selected band member IDs as an array
+        bandName, // Include the user's entered band name
+      };
+  
+      try {
+        const response = await fetch("http://localhost:3000/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+  
+        // Save the bandName to local storage
+        localStorage.setItem("bandName", bandName);
+  
+        // Navigate to the '/game/main' path upon successful submission
+        navigate(`/game/main/${bandName}`);
+      } catch (error) {
+        console.error(error);
       }
-
-      // Handle success or redirect the user as needed
-    } catch (error) {
-      console.error(error);
+    } else {
+      // Display an error message to the user if the conditions are not met
+      alert("Please select four band members and provide a band name.");
     }
   };
 
@@ -101,18 +114,7 @@ export default function GameStart() {
     gap: "20px",
   };
 
-  const buttonStyle = {
-    padding: "10px 20px",
-    fontFamily: "courier",
-    fontSize: "16px",
-    backgroundColor: "#279EFF",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    transition: "background-color 0.3s",
-  };
-
+  
   const startGameClickHandler = () => {
     setShowForm(true); // Show the form when Start Game is clicked
   };
@@ -192,3 +194,5 @@ export default function GameStart() {
     </div>
   );
 }
+
+
