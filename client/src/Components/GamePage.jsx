@@ -66,9 +66,9 @@ export default function GamePage() {
   };
 
   return (
-    <div className="bg-gray-900">
+    <div className="bg-gray-900 scroll-smooth">
       {/* Here's the music. If you delete "control" it will autoplay with no controls, that is another option. */}
-      <audio className="mx-12" controls autoPlay>
+      <audio className="mx-12 mt-12" controls autoPlay>
         <source
           src={`${imageFolderPath}/8bit-music.mp3`}
           type="audio/mp3"
