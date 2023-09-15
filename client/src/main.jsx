@@ -10,6 +10,7 @@ import NavBar from './Components/NavBar';
 import GameStart from './Components/GameStart';
 import Account from './Components/Account';
 import GamePage from './Components/GamePage';
+import MediaEvents from './Components/MediaEvents';
 
 
 const router = createBrowserRouter([
@@ -40,7 +41,19 @@ const router = createBrowserRouter([
       {
         path: "main/:bandName",
         element: <GamePage/>
-      }
+      },
+      {
+        path: 'concert/:bandName',
+        element: <Concerts />
+      },
+      {
+        path: 'pratice/:bandName',
+        element: <Practice />
+      },
+      {
+        path: 'mediaEvent/:bandName',
+        element: <MediaEvents />
+      },
     ]
   }
 ]);
