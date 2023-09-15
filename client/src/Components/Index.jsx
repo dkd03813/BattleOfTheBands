@@ -8,7 +8,7 @@ export default function Index() {
       return (
         <div className="group bg-gray-900">
           <img src={`${imageFolderPath}/5.png`} alt="title" />
-          <section className=" bg-gray-900 flex items-center justify-center text-center  text-white">
+          <section className="bg-gray-900 flex items-center justify-center text-center  text-white">
             <ul className="list-none">
           <li><h1>Highway to Harmony</h1>
           <Link to="/create"> 
