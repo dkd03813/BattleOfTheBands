@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+const imageFolderPath = '/src/assets';
+
 const buttonContainerStyle = {
  display: 'flex',
  gap: '20px',
@@ -47,12 +49,14 @@ export default function Login() {
   };
  
   return (
+    
     <div>
-      <section className="h-screen font-mono bg-gray-900 flex items-center justify-center text-center text-3xl">
-      <ul className="list-none">
+      <section className="h-screen bg-gray-900 flex items-center justify-center text-center text-3xl">
+      <ul className="list-none text-center">
+      <li className="inline-block"><img src={`${imageFolderPath}/guitar-image.png`} alt="title" className="object-scale-down h-48" /></li>
       <li><h1 className="text-white">Login</h1></li>
       <form>
-        <li>
+        <li className="inline-block">
         <div>
           <label htmlFor="username" className="text-white"><h1>Username:</h1></label>
           <input

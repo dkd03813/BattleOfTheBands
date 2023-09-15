@@ -124,15 +124,16 @@ export default function GameStart() {
   };
 
   return (
-    <div className="bg-gray-900">
-      {/* Here's the music. If you delete "control" it will autoplay with no controls, that is another option. */}
-      <audio className="mx-12" controls autoPlay>
+    <div className="bg-gray-900 scroll-smooth">
+      {/* Here's the music. If you delete "control" it will autoplay with no controls, that is another option. You can also add autoPlay in className for it to auto play.*/}
+      <audio className="mx-12 mt-12" controls>
         <source
           src={`${imageFolderPath}/8bit-music.mp3`}
-          type="audio/mp3"
-        ></source>
+          type="audio/mp3">
+          </source>
       </audio>
       <div style={containerStyle}>
+        <img src={`${imageFolderPath}/HighwayHarmony2.png`} alt="title" className="object-scale-down w-40" />
         <h1 className="mx-12 my-6 text-white">Highway to Harmony</h1>
         {showForm ? (
           <form>
@@ -170,7 +171,7 @@ export default function GameStart() {
 ))}
 </ul>
 
-            <button className="btn btn-primary mt-3 float-right w-50 " onClick={submitForm}>
+            <button className="btn btn-primary mt-3 float-right" onClick={submitForm}>
               <h1>Submit</h1>
             </button>
           </form>
