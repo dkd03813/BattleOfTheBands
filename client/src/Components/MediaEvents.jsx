@@ -53,9 +53,9 @@ export default function MediaEvents() {
 
   return (
     <div>
-      <h2>Media Event</h2>
       <div className="card">
         <div className="card-body">
+        <h2>Media Event</h2>
           <h3 className="card-title">{mediaEvent.eventTitle}</h3>
           <p className="card-text">Type: {mediaEvent.eventType}</p>
           <p className="card-text">Details: {mediaEvent.eventDetails}</p>
@@ -64,7 +64,7 @@ export default function MediaEvents() {
           <p className="card-text">Created At: {mediaEvent.createdAt}</p>
           <p className="card-text">Updated At: {mediaEvent.updatedAt}</p>
           <button className="btn btn-primary" onClick={handleNavigate}>
-            Read Event and Continue
+            Accept and Continue
           </button>
         </div>
       </div>
