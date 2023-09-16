@@ -126,6 +126,25 @@ router.post('/save', async (req, res) => {
 });
 
 
+//Display all the saves associated with a user's account at the id in local storage 
+router.get("/saved-games/:userID", async (req, res) => {
+  const { userID } = req.params;
+
+  try {
+    // Find all saved games for the user by their userID
+    const savedGames = await UserSave.findAll({
+      where: { userID },
+    });
+
+    // Send the saved games as a JSON response
+    res.json(savedGames);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 
 //route for handling the edit of a user's account
 
