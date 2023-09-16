@@ -11,6 +11,8 @@ import GameStart from './Components/GameStart';
 import Account from './Components/Account';
 import GamePage from './Components/GamePage';
 import MediaEvents from './Components/MediaEvents';
+import Concerts from './Components/Concerts';
+import Practice from "./Components/Practice"
 
 
 const router = createBrowserRouter([

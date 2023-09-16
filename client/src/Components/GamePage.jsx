@@ -7,10 +7,12 @@ import "../index.css";
 
 export default function GamePage() {
   const imageFolderPath = "/src/assets";
-  const navigate = useNavigate(); // Add useNavigate hook
+  const navigate = useNavigate();
 
-  const [bandMembers, setBandMembers] = useState([]); // State to store band members data
-  const [bandName, setBandName] = useState(""); // State to store band name
+  const [bandMembers, setBandMembers] = useState([]);
+  const [bandName, setBandName] = useState("");
+  const [money, setMoney] = useState(0);
+  const [cred, setCred] = useState(0);
 
   useEffect(() => {
     const storedBandName = localStorage.getItem("bandName");
@@ -19,20 +21,27 @@ export default function GamePage() {
     } else {
       setBandName(storedBandName);
 
-      // Fetch band members by bandName for /game/main
-      fetch(`http://localhost:3000/game/main/${storedBandName}`)
-        .then((response) => response.json())
-        .then((data) => {
-          // Set the retrieved band members in your state
-          console.log("Fetched band members:", data);
-          setBandMembers(data);
-          console.log(bandMembers)
-        })
-        .catch((error) => {
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:3000/game/main/${storedBandName}`
+          );
+          const data = await response.json();
+          console.log(data);
+
+          console.log("Data received from server:", data);
+
+          setBandMembers(data.bandMembers);
+          setMoney(data.money);
+          setCred(data.cred);
+        } catch (error) {
           console.error(error);
-        });
+        }
+      };
+
+      fetchData();
     }
-  }, []);
+  }, [money,cred]);
 
   const containerStyle = {
     display: "flex",
@@ -60,9 +69,8 @@ export default function GamePage() {
     transition: "background-color 0.3s",
   };
 
-  const handleActivityClick = (activity) => {
-    // Perform some action based on the selected activity
-    alert(`Selected activity: ${activity}`);
+  const handleMediaEventsClick = () => {
+    navigate(`/game/mediaEvent/${bandName}`);
   };
 
   return (
@@ -77,6 +85,8 @@ export default function GamePage() {
       <div style={containerStyle}>
         <h1 className="mx-12 my-6 text-white">Highway to Harmony</h1>
         <h2 className="text-white">Band Name: {bandName}</h2>
+        <h3 className="text-white">Money: {money}</h3>
+        <h3 className="text-white">Credibility: {cred}</h3>
         <div className="mb-3">
           <ul className="flex">
             {bandMembers.map((bandMember) => (
@@ -114,11 +124,11 @@ export default function GamePage() {
             Band Practice
           </button>
           <button
-            className="btn btn-primary"
-            onClick={() => handleActivityClick("Media Events")}
-          >
-            Media Events
-          </button>
+        className="btn btn-primary"
+        onClick={handleMediaEventsClick}
+      >
+        Media Events
+      </button>
           <button
             className="btn btn-primary"
             onClick={() => handleActivityClick("Concerts and Gigs")}

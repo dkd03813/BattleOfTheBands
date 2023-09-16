@@ -7,6 +7,8 @@ const saltRounds = 10;
 const { User } = require("../models");
 const { BandMember } = require('../models');
 const {UserSave} = require("../models")
+const {Events} = require("../models")
+const {sequelize} = require("../models")
 const findProfile = require("../middleware/findProfile");
 const authCheck = require("../middleware/authCheck");
 const { Op } = require('sequelize');
@@ -226,12 +228,88 @@ router.get("/game/main/:bandName", async (req, res) => {
       },
     });
 
-    res.json(bandMembers);
+    // Query the UserSaves table to get money and cred for the bandName
+    const userSaveData = await UserSave.findOne({
+      where: {
+        bandName: bandName,
+      },
+    });
+
+    const money = userSaveData ? userSaveData.money : 0;
+    const cred = userSaveData ? userSaveData.cred : 0;
+
+    // Combine band members, money, and cred into a single object
+    const responseData = {
+      bandMembers: bandMembers,
+      money: money,
+      cred: cred,
+    };
+
+    res.json(responseData);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+router.get("/game/mediaEvent/:bandName", async (req, res) => {
+  try {
+    const bandName = req.params.bandName; // Retrieve bandName from URL params
+
+    const eventTypes = ["Tv Appearance", "Podcast", "Interviews", "Magazine", "Commercial", "Meet and Greet"];
+    
+    // Query the database to find a random event of the specified types
+    const randomEvent = await Events.findOne({
+      where: {
+        eventType: eventTypes,
+      },
+      order: sequelize.fn('random'),
+    });
+
+    console.log("Random Event:", randomEvent); // Add this console log
+    
+    if (!randomEvent) {
+      return res.status(404).json({ message: 'No events found' });
+    }
+    
+    // Respond with the selected random event
+    res.json(randomEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/game/updateUserSaves/:bandName", async (req, res) => {
+  try {
+    const { bandName } = req.params;
+    const { eventCred, eventMoney } = req.body;
+
+    // Find all user UserSaves records based on bandName
+    const userSaves = await UserSave.findAll({
+      where: { bandName },
+    });
+
+    if (!userSaves) {
+      return res.status(404).json({ error: "UserSave records not found" });
+    }
+
+    // Update UserSaves with eventCred and eventMoney for all records
+    for (const userSave of userSaves) {
+      userSave.cred += eventCred;
+      userSave.money += eventMoney;
+
+      // Save the updated UserSaves record
+      await userSave.save();
+    }
+
+    res.status(200).json({ message: "UserSaves updated successfully" });
+  } catch (error) {
+    console.error("Error updating UserSaves:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 
 module.exports = router;
