@@ -13,6 +13,8 @@ export default function GamePage() {
   const [bandName, setBandName] = useState("");
   const [money, setMoney] = useState(0);
   const [cred, setCred] = useState(0);
+  const [practiceDone, setPracticeDone] = useState(false); // Track if practice is done
+  const [practiceCount, setPracticeCount] = useState(0); // Track the number of practice sessions
 
   useEffect(() => {
     const storedBandName = localStorage.getItem("bandName");
@@ -20,7 +22,15 @@ export default function GamePage() {
       navigate("/game/start");
     } else {
       setBandName(storedBandName);
-
+  
+      // Initialize practiceCount from local storage or default to 0
+      const storedPracticeCount = localStorage.getItem("practiceCount");
+      if (storedPracticeCount) {
+        setPracticeCount(parseInt(storedPracticeCount, 10));
+      } else {
+        setPracticeCount(0);
+      }
+  
       const fetchData = async () => {
         try {
           const response = await fetch(
@@ -28,9 +38,9 @@ export default function GamePage() {
           );
           const data = await response.json();
           console.log(data);
-
+  
           console.log("Data received from server:", data);
-
+  
           setBandMembers(data.bandMembers);
           setMoney(data.money);
           setCred(data.cred);
@@ -38,10 +48,10 @@ export default function GamePage() {
           console.error(error);
         }
       };
-
+  
       fetchData();
     }
-  }, [money,cred]);
+  }, [navigate,money,cred]);
 
   const containerStyle = {
     display: "flex",
@@ -57,38 +67,100 @@ export default function GamePage() {
     marginTop: "20px",
   };
 
-  const buttonStyle = {
+  const retroButtonStyle = {
     padding: "10px 20px",
-    fontFamily: "courier",
-    fontSize: "16px",
-    backgroundColor: "#279EFF",
-    color: "white",
+    fontFamily: "Courier New, monospace",
+    fontSize: "18px", // Increased font size
+    background: "linear-gradient(to bottom, #FFA7D1, #B19CD9)", // Pastel pink and purple gradient background
+    color: "#311C87", // Darker text color
     border: "none",
-    borderRadius: "5px",
+    borderRadius: "15px",
     cursor: "pointer",
     transition: "background-color 0.3s",
+  };
+
+  const retroStatsStyle = {
+    background: "linear-gradient(to bottom, #FFA7D1, #B19CD9)", // Background matches the button style
+    color: "#311C87", // Darker text color
+    padding: "10px",
+    borderRadius: "15px",
+    marginTop: "10px",
+    fontFamily: "Courier New, monospace",
+    display: "flex",
+    justifyContent: "space-around", // Evenly space out all the stats, including edges
+    alignItems: "center",
+    gap: "20px", // Increased spacing between stats
+    fontSize: "18px", // Increased font size
+    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", // Darker, thicker border
+  };
+
+  const retroStatItemStyle = {
+    marginRight: "10px", // Add some spacing between stats
   };
 
   const handleMediaEventsClick = () => {
     navigate(`/game/mediaEvent/${bandName}`);
   };
 
+  const handleConcertsClick = () => {
+    if (practiceDone || practiceCount >= 3) {
+      // Reset practiceDone and practiceCount
+      setPracticeDone(false);
+      setPracticeCount(0);
+  
+      // Remove practiceCount from local storage
+      localStorage.removeItem("practiceCount");
+  
+      navigate(`/game/concert/${bandName}`);
+    } else {
+      alert(
+        "Woah Tiger! We gotta get some practice in before jumping on stage."
+      );
+    }
+  };
+
+  const handlePracticeClick = () => {
+    if (practiceCount < 3) {
+      // Set practiceDone to true when practice is done
+      setPracticeDone(true);
+      setPracticeCount((prevCount) => prevCount + 1);
+  
+      // Store the updated practiceCount in local storage
+      localStorage.setItem("practiceCount", practiceCount + 1);
+  
+      navigate(`/game/practice/${bandName}`);
+    } else {
+      alert(
+        "You can only practice up to three times. It's time to go to a concert!"
+      );
+    }
+  };
+
   return (
     <div className="bg-gray-900 scroll-smooth">
-      {/* Here's the music. If you delete "control" it will autoplay with no controls, that is another option. */}
-      <audio className="mx-12 mt-12" controls autoPlay>
-        <source
-          src={`${imageFolderPath}/8bit-music.mp3`}
-          type="audio/mp3"
-        ></source>
-      </audio>
-      <div style={containerStyle}>
-        <h1 className="mx-12 my-6 text-white">Highway to Harmony</h1>
-        <h2 className="text-white">Band Name: {bandName}</h2>
-        <h3 className="text-white">Money: {money}</h3>
-        <h3 className="text-white">Credibility: {cred}</h3>
+      <div style={containerStyle} className="text-center">
+        <img
+          src={`${imageFolderPath}/rock.png`}
+          alt="title"
+          className="mx-auto"
+          style={{ width: "20%" }} // Adjust the width as needed
+        />
+        <h1 className="text-4xl my-6 text-white font-pixel">
+          Highway to Harmony
+        </h1>
         <div className="mb-3">
-          <ul className="flex">
+          <div style={retroStatsStyle}>
+            <h2 style={retroStatItemStyle}>
+              <h1>BAND NAME: {bandName}</h1>
+            </h2>
+            <h3 style={retroStatItemStyle}>
+              <h1>CASH: ${money}</h1>
+            </h3>
+            <h3 style={retroStatItemStyle}>
+              <h1>CRED: {cred}</h1>
+            </h3>
+          </div>
+          <ul className="flex flex-wrap">
             {bandMembers.map((bandMember) => (
               <div
                 className={`card ${
@@ -106,37 +178,34 @@ export default function GamePage() {
                   alt={bandMember.members}
                 />
                 <div className="card-body">
-                  <h5 className="card-title">{bandMember.members}</h5>
-                  <p className="card-text">{bandMember.type}</p>
+                  <h5 className="card-title">
+                    <h1>{bandMember.members}</h1>
+                  </h5>
                   <p className="card-text">
-                    Member ID: {bandMember.bandMemberID}
+                    <h1>{bandMember.type}</h1>
                   </p>
+                  <p className="card-text">
+                    <h1>{bandMember.archetype}</h1>
+                  </p>
+                  {/* Member ID is hidden */}
                 </div>
               </div>
             ))}
           </ul>
         </div>
         <div style={buttonContainerStyle}>
-          <button
-            className="btn btn-primary"
-            onClick={() => handleActivityClick("Band Practice")}
-          >
-            Band Practice
+          <button style={retroButtonStyle} onClick={handlePracticeClick}>
+            <h1>Band Practice</h1>
           </button>
-          <button
-        className="btn btn-primary"
-        onClick={handleMediaEventsClick}
-      >
-        Media Events
-      </button>
-          <button
-            className="btn btn-primary"
-            onClick={() => handleActivityClick("Concerts and Gigs")}
-          >
-            Concerts and Gigs
+          <button style={retroButtonStyle} onClick={handleMediaEventsClick}>
+            <h1> Media Events</h1>
+          </button>
+          <button style={retroButtonStyle} onClick={handleConcertsClick}>
+            <h1> Concerts and Gigs</h1>
           </button>
         </div>
       </div>
     </div>
   );
 }
+

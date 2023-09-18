@@ -6,6 +6,7 @@ import img from "../assets/JonBohnam.png";
 import "../index.css";
 
 export default function MediaEvents() {
+  const imageFolderPath = "/src/assets";
   const { bandName } = useParams(); // Extract bandName from route parameters
   const navigate = useNavigate(); // Access the navigate function
 
@@ -30,7 +31,6 @@ export default function MediaEvents() {
     navigate(`/game/main/${bandName}`);
 
     // Update UserSaves table with eventCred and eventMoney
-    // You can make a POST request to your server to update the database
     fetch(`http://localhost:3000/game/updateUserSaves/${bandName}`, {
       method: "POST",
       headers: {
@@ -39,6 +39,7 @@ export default function MediaEvents() {
       body: JSON.stringify({
         eventCred: mediaEvent.eventCred,
         eventMoney: mediaEvent.eventMoney,
+        eventType: mediaEvent.eventType
       }),
     })
       .then((response) => response.json())
@@ -51,26 +52,71 @@ export default function MediaEvents() {
       });
   };
 
+  const pageStyle = {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "100vh",
+  };
+
+  const cardStyle = {
+    background: "linear-gradient(to bottom, #FFA7D1, #B19CD9)",
+    color: "#311C87",
+    padding: "20px",
+    borderRadius: "15px",
+    margin: "20px",
+    fontFamily: "Courier New, monospace",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "20px",
+    fontSize: "18px",
+    textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+  };
+
+  const buttonStyle = {
+    padding: "10px 20px",
+    fontFamily: "Courier New, monospace",
+    fontSize: "18px",
+    background: "linear-gradient(to bottom, #FFA7D1, #B19CD9)",
+    color: "#311C87",
+    border: "none",
+    borderRadius: "15px",
+    cursor: "pointer",
+    transition: "background-color 0.3s",
+  };
+
   return (
-    <div>
-      <div className="card">
-        <div className="card-body">
-        <h2>Media Event</h2>
-          <h3 className="card-title">{mediaEvent.eventTitle}</h3>
-          <p className="card-text">Type: {mediaEvent.eventType}</p>
-          <p className="card-text">Details: {mediaEvent.eventDetails}</p>
-          <p className="card-text">Money: {mediaEvent.eventMoney}</p>
-          <p className="card-text">Credibility: {mediaEvent.eventCred}</p>
-          <p className="card-text">Created At: {mediaEvent.createdAt}</p>
-          <p className="card-text">Updated At: {mediaEvent.updatedAt}</p>
-          <button className="btn btn-primary" onClick={handleNavigate}>
-            Accept and Continue
-          </button>
+    <div className="bg-gray-900 scroll-smooth" style={pageStyle}>
+      <div className="text-center">
+      <img
+  src={`${imageFolderPath}/MediaEvent-Good.png`}
+  alt="title"
+  className="mx-auto"
+  style={{ width: "30%" }} // Adjust the width as needed
+/>
+        <h1 className="text-4xl my-6 text-white font-pixel">Highway to Harmony</h1>
+        <div className="mb-3">
+          <div style={cardStyle}>
+          <h1 className="card-title" style={{ fontSize: "78px" }}>{mediaEvent.eventTitle}</h1>
+<h1 className="card-text" style={{ fontSize: "50px" }}>Type: {mediaEvent.eventType}</h1>
+<h1 className="card-text" style={{ fontSize: "45px" }}>Details: {mediaEvent.eventDetails}</h1>
+<h1 className="card-text">Money: {mediaEvent.eventMoney}</h1>
+<h1 className="card-text">Credibility: {mediaEvent.eventCred}</h1>
+            
+          </div>
         </div>
+        <button style={buttonStyle} onClick={handleNavigate}>
+          <h1>Accept and Continue</h1>
+        </button>
       </div>
     </div>
   );
 }
+
+       
+
 
 
 

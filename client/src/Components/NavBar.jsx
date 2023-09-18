@@ -53,7 +53,7 @@ export default function NavBar() {
     <nav className="navbar bg-gray-800">
       <ul className="navbar-list flex">
         <li className="navbar-item flex-1 mx-6 my-6">
-          <Link to="/">
+          <Link to="/game">
             <button className="bg-gray-800 hover:bg-gray-100 hover:text-gray-900 text-gray-100 py-2 px-4 rounded-full"><h1>Home</h1></button>
             </Link>
         </li>
