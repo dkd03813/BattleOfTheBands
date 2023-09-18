@@ -29,7 +29,39 @@ export default function MediaEvents() {
   const handleNavigate = () => {
     // Perform the navigation when the button is clicked
     navigate(`/game/main/${bandName}`);
-
+  
+    // Check if practiceMult is in localStorage and is a positive value
+    const practiceMult = localStorage.getItem("practiceMult");
+  
+    if (practiceMult !== null) {
+      const parsedPracticeMult = parseFloat(practiceMult);
+  
+      if (!isNaN(parsedPracticeMult) && parsedPracticeMult !== 0) {
+        // Check if it's not a Practice event
+        if (mediaEvent.eventType !== "Practice") {
+          if (mediaEvent.eventCred > 0) {
+            // Calculate the new practiceMult value
+            const updatedPracticeMult = parsedPracticeMult + Math.ceil(mediaEvent.eventCred / 2);
+  
+            // Update practiceMult in localStorage
+            localStorage.setItem("practiceMult", updatedPracticeMult.toString());
+          } else if (mediaEvent.eventCred < 0) {
+            // Calculate the new practiceMult value
+            const updatedPracticeMult = parsedPracticeMult + Math.ceil(mediaEvent.eventCred / 2);
+  
+            // Update practiceMult in localStorage
+            localStorage.setItem("practiceMult", updatedPracticeMult.toString());
+          }
+        } else if (parsedPracticeMult < 0 && mediaEvent.eventCred > 0) {
+          // Add mediaEvent.eventCred to practiceMult if practiceMult is negative and eventCred is positive
+          const updatedPracticeMult = parsedPracticeMult + mediaEvent.eventCred;
+  
+          // Update practiceMult in localStorage
+          localStorage.setItem("practiceMult", updatedPracticeMult.toString());
+        }
+      }
+    }
+  
     // Update UserSaves table with eventCred and eventMoney
     fetch(`http://localhost:3000/game/updateUserSaves/${bandName}`, {
       method: "POST",
@@ -39,7 +71,7 @@ export default function MediaEvents() {
       body: JSON.stringify({
         eventCred: mediaEvent.eventCred,
         eventMoney: mediaEvent.eventMoney,
-        eventType: mediaEvent.eventType
+        eventType: mediaEvent.eventType,
       }),
     })
       .then((response) => response.json())
@@ -51,6 +83,8 @@ export default function MediaEvents() {
         console.error("Error updating UserSaves:", error);
       });
   };
+  
+  
 
   const pageStyle = {
     display: "flex",
@@ -90,21 +124,20 @@ export default function MediaEvents() {
   return (
     <div className="bg-gray-900 scroll-smooth" style={pageStyle}>
       <div className="text-center">
-      <img
-  src={`${imageFolderPath}/MediaEvent-Good.png`}
-  alt="title"
-  className="mx-auto"
-  style={{ width: "30%" }} // Adjust the width as needed
-/>
+        <img
+          src={`${imageFolderPath}/MediaEvent-Good.png`}
+          alt="title"
+          className="mx-auto"
+          style={{ width: "30%" }} // Adjust the width as needed
+        />
         <h1 className="text-4xl my-6 text-white font-pixel">Highway to Harmony</h1>
         <div className="mb-3">
           <div style={cardStyle}>
-          <h1 className="card-title" style={{ fontSize: "78px" }}>{mediaEvent.eventTitle}</h1>
-<h1 className="card-text" style={{ fontSize: "50px" }}>Type: {mediaEvent.eventType}</h1>
-<h1 className="card-text" style={{ fontSize: "45px" }}>Details: {mediaEvent.eventDetails}</h1>
-<h1 className="card-text">Money: {mediaEvent.eventMoney}</h1>
-<h1 className="card-text">Credibility: {mediaEvent.eventCred}</h1>
-            
+            <h1 className="card-title" style={{ fontSize: "78px" }}>{mediaEvent.eventTitle}</h1>
+            <h1 className="card-text" style={{ fontSize: "50px" }}>Type: {mediaEvent.eventType}</h1>
+            <h1 className="card-text" style={{ fontSize: "45px" }}>Details: {mediaEvent.eventDetails}</h1>
+            <h1 className="card-text">Money: {mediaEvent.eventMoney}</h1>
+            <h1 className="card-text">Credibility: {mediaEvent.eventCred}</h1>
           </div>
         </div>
         <button style={buttonStyle} onClick={handleNavigate}>
@@ -114,6 +147,7 @@ export default function MediaEvents() {
     </div>
   );
 }
+
 
        
 

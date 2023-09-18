@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import img from "../assets/JonBohnam.png";
 import "../index.css";
+import CustomAlert from "./CustomAlert"; // Import the custom alert component
 
 export default function GamePage() {
   const imageFolderPath = "/src/assets";
@@ -15,6 +16,8 @@ export default function GamePage() {
   const [cred, setCred] = useState(0);
   const [practiceDone, setPracticeDone] = useState(false); // Track if practice is done
   const [practiceCount, setPracticeCount] = useState(0); // Track the number of practice sessions
+  const [showPracticeAlert, setShowPracticeAlert] = useState(false); // State to control practice alert
+  const [showConcertAlert, setShowConcertAlert] = useState(false); // State to control concert alert
 
   useEffect(() => {
     const storedBandName = localStorage.getItem("bandName");
@@ -22,7 +25,7 @@ export default function GamePage() {
       navigate("/game/start");
     } else {
       setBandName(storedBandName);
-  
+
       // Initialize practiceCount from local storage or default to 0
       const storedPracticeCount = localStorage.getItem("practiceCount");
       if (storedPracticeCount) {
@@ -30,7 +33,7 @@ export default function GamePage() {
       } else {
         setPracticeCount(0);
       }
-  
+
       const fetchData = async () => {
         try {
           const response = await fetch(
@@ -38,9 +41,9 @@ export default function GamePage() {
           );
           const data = await response.json();
           console.log(data);
-  
+
           console.log("Data received from server:", data);
-  
+
           setBandMembers(data.bandMembers);
           setMoney(data.money);
           setCred(data.cred);
@@ -48,10 +51,10 @@ export default function GamePage() {
           console.error(error);
         }
       };
-  
+
       fetchData();
     }
-  }, [navigate,money,cred]);
+  }, [navigate, money, cred]);
 
   const containerStyle = {
     display: "flex",
@@ -103,19 +106,17 @@ export default function GamePage() {
   };
 
   const handleConcertsClick = () => {
-    if (practiceDone || practiceCount >= 3) {
+    if (practiceDone || practiceCount > 0) {
       // Reset practiceDone and practiceCount
       setPracticeDone(false);
       setPracticeCount(0);
-  
+
       // Remove practiceCount from local storage
       localStorage.removeItem("practiceCount");
-  
+
       navigate(`/game/concert/${bandName}`);
     } else {
-      alert(
-        "Woah Tiger! We gotta get some practice in before jumping on stage."
-      );
+      setShowConcertAlert(true); // Show the concert alert
     }
   };
 
@@ -124,17 +125,18 @@ export default function GamePage() {
       // Set practiceDone to true when practice is done
       setPracticeDone(true);
       setPracticeCount((prevCount) => prevCount + 1);
-  
+
       // Store the updated practiceCount in local storage
       localStorage.setItem("practiceCount", practiceCount + 1);
-  
+
       navigate(`/game/practice/${bandName}`);
     } else {
-      alert(
-        "You can only practice up to three times. It's time to go to a concert!"
-      );
+      setShowPracticeAlert(true); // Show the practice alert
     }
   };
+
+
+  const practiceMult = parseFloat(localStorage.getItem("practiceMult")) || 0;
 
   return (
     <div className="bg-gray-900 scroll-smooth">
@@ -159,6 +161,9 @@ export default function GamePage() {
             <h3 style={retroStatItemStyle}>
               <h1>CRED: {cred}</h1>
             </h3>
+            <h3 style={retroStatItemStyle}>
+            <h1>CONCERT MULTIPLIER: {practiceMult}</h1>
+          </h3>
           </div>
           <ul className="flex flex-wrap">
             {bandMembers.map((bandMember) => (
@@ -187,6 +192,7 @@ export default function GamePage() {
                   <p className="card-text">
                     <h1>{bandMember.archetype}</h1>
                   </p>
+
                   {/* Member ID is hidden */}
                 </div>
               </div>
@@ -205,7 +211,19 @@ export default function GamePage() {
           </button>
         </div>
       </div>
+      <CustomAlert
+        isOpen={showPracticeAlert}
+        message="You can only practice up to three times. It's time to go to a concert!"
+        onClose={() => setShowPracticeAlert(false)}
+      />
+      <CustomAlert
+        isOpen={showConcertAlert}
+        message="Woah Tiger! We gotta get some practice in before jumping on stage."
+        onClose={() => setShowConcertAlert(false)}
+      />
     </div>
   );
 }
+
+
 
