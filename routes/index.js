@@ -299,10 +299,42 @@ router.get("/game/mediaEvent/:bandName", async (req, res) => {
   }
 });
 
+
+//This route is for grabbing a random event that has the Practice Type
+router.get("/game/practice/:bandName", async (req, res) => {
+  try {
+    const bandName = req.params.bandName; // Retrieve bandName from URL params
+
+    const eventTypes = ["Practice"];
+    
+    // Query the database to find a random event of the specified types
+    const randomEvent = await Events.findOne({
+      where: {
+        eventType: eventTypes,
+      },
+      order: sequelize.fn('random'),
+    });
+
+    console.log("Random Event:", randomEvent); // Add this console log
+    
+    if (!randomEvent) {
+      return res.status(404).json({ message: 'No events found' });
+    }
+    
+    // Respond with the selected random event
+    res.json(randomEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 router.post("/game/updateUserSaves/:bandName", async (req, res) => {
   try {
     const { bandName } = req.params;
-    const { eventCred, eventMoney } = req.body;
+    const { eventCred, eventMoney, eventType } = req.body;
+
+    console.log("Received eventType in the request:", eventType);
 
     // Find all user UserSaves records based on bandName
     const userSaves = await UserSave.findAll({
@@ -313,10 +345,19 @@ router.post("/game/updateUserSaves/:bandName", async (req, res) => {
       return res.status(404).json({ error: "UserSave records not found" });
     }
 
-    // Update UserSaves with eventCred and eventMoney for all records
     for (const userSave of userSaves) {
-      userSave.cred += eventCred;
-      userSave.money += eventMoney;
+      if (eventType === "Practice") {
+        // Only update the money field if it's a Practice event
+        userSave.money += eventMoney;
+      } else {
+        // Update both money and cred for all other event types
+        userSave.money += eventMoney;
+        
+        if (eventCred !== 0) {
+          // Only update the cred field if eventCred is not zero
+          userSave.cred += eventCred;
+        }
+      }
 
       // Save the updated UserSaves record
       await userSave.save();
@@ -328,6 +369,8 @@ router.post("/game/updateUserSaves/:bandName", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
+
 
 
 

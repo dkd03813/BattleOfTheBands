@@ -49,7 +49,7 @@ const router = createBrowserRouter([
         element: <Concerts />
       },
       {
-        path: 'pratice/:bandName',
+        path: 'practice/:bandName',
         element: <Practice />
       },
       {

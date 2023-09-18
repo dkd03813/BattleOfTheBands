@@ -7,21 +7,23 @@ import "../index.css";
 
 export default function GameStart() {
   const imageFolderPath = "/src/assets";
+  const navigate = useNavigate();
 
   const [showForm, setShowForm] = useState(false);
-  const [showSavedGames, setShowSavedGames] = useState(false); // Added state to control saved games display
+  const [showSavedGames, setShowSavedGames] = useState(false);
   const [bandMembers, setBandMembers] = useState([]);
   const [bandName, setBandName] = useState("");
   const [bandMemberIDs, setBandMemberIDs] = useState([]);
   const [savedGames, setSavedGames] = useState([]);
   const [uniqueBandNames, setUniqueBandNames] = useState([]);
-  const navigate = useNavigate();
 
   // Fetch user's saved games from the backend
   const fetchSavedGames = async () => {
     try {
       const userID = localStorage.getItem("userId");
-      const response = await fetch(`http://localhost:3000/saved-games/${userID}`);
+      const response = await fetch(
+        `http://localhost:3000/saved-games/${userID}`
+      );
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
@@ -29,7 +31,9 @@ export default function GameStart() {
       setSavedGames(data);
 
       // Extract unique band names from the saved games
-      const uniqueNames = Array.from(new Set(data.map((game) => game.bandName)));
+      const uniqueNames = Array.from(
+        new Set(data.map((game) => game.bandName))
+      );
       setUniqueBandNames(uniqueNames);
     } catch (error) {
       console.error(error);
@@ -37,66 +41,10 @@ export default function GameStart() {
   };
 
   const loadSavedGame = (selectedGame) => {
-    // this is for the GamePage component, which depends on a local storage key named bandName in order to send the appropriate request to the server
-    localStorage.setItem("bandName", selectedGame.bandName); // Set the bandName in local storage
+    localStorage.setItem("bandName", selectedGame.bandName);
     setBandName(selectedGame.bandName);
     setBandMemberIDs(selectedGame.bandMemberIDs);
-
-    // Use the navigate function to navigate to the correct path
     navigate(`/game/main/${selectedGame.bandName}`);
-  };
-
-  // Function to submit the form and navigate to the selected game
-  const submitForm = async (e) => {
-    e.preventDefault();
-
-    if (bandMemberIDs.length === 4 && bandName.trim() !== "") {
-      const userID = localStorage.getItem("userId");
-      const requestBody = {
-        userID,
-        bandMemberIDs,
-        bandName,
-      };
-
-      try {
-        const response = await fetch("http://localhost:3000/save", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(requestBody),
-        });
-
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        localStorage.setItem("bandName", bandName);
-        navigate(`/game/main/${bandName}`);
-      } catch (error) {
-        console.error(error);
-      }
-    } else {
-      alert("Please select four band members and provide a band name.");
-    }
-  };
-
-  useEffect(() => {
-    fetchSavedGames();
-  }, []);
-
-  const containerStyle = {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
-    height: "100vh",
-  };
-
-  const buttonContainerStyle = {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-    gap: "20px",
   };
 
   const startGameClickHandler = () => {
@@ -112,7 +60,61 @@ export default function GameStart() {
     }
   };
 
-  // Function to toggle band member selection
+  const submitForm = async (e) => {
+    e.preventDefault();
+
+    const trimmedBandName = bandName.trim();
+
+    if (bandMemberIDs.length === 4 && trimmedBandName !== "") {
+      const userID = localStorage.getItem("userId");
+      const requestBody = {
+        userID,
+        bandMemberIDs,
+        bandName: trimmedBandName,
+      };
+
+      try {
+        const response = await fetch("http://localhost:3000/save", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(requestBody),
+        });
+
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        localStorage.setItem("bandName", trimmedBandName);
+        navigate(`/game/main/${trimmedBandName}`);
+      } catch (error) {
+        console.error(error);
+      }
+    } else {
+      alert("Please select four band members and provide a band name.");
+    }
+  };
+
+  const fetchBandMembers = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/game");
+      if (!response.ok) {
+        throw Error("Network response was not ok");
+      }
+      const data = await response.json();
+
+      // Add 'isSelected' property to each band member
+      const bandMembersWithSelection = data.map((bandMember) => ({
+        ...bandMember,
+        isSelected: false, // Initialize as not selected
+      }));
+      setBandMembers(bandMembersWithSelection);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const toggleSelection = (bandMemberID) => {
     setBandMembers((prevMembers) =>
       prevMembers.map((bandMember) =>
@@ -122,7 +124,6 @@ export default function GameStart() {
       )
     );
 
-    // Update the selected band member IDs
     setBandMemberIDs((prevIDs) =>
       prevIDs.includes(bandMemberID)
         ? prevIDs.filter((id) => id !== bandMemberID)
@@ -130,17 +131,21 @@ export default function GameStart() {
     );
   };
 
+  useEffect(() => {
+    fetchSavedGames();
+    fetchBandMembers();
+  }, []);
+
   return (
     <div className="bg-gray-900 scroll-smooth">
       <audio className="mx-12 mt-12" controls>
         <source src={`${imageFolderPath}/8bit-music.mp3`} type="audio/mp3"></source>
       </audio>
-      <div style={containerStyle}>
+      <div className="d-flex flex-column align-items-center justify-content-center h-100">
         <img src={`${imageFolderPath}/HighwayHarmony2.png`} alt="title" className="object-scale-down w-40" />
         <h1 className="mx-12 my-6 text-white">Highway to Harmony</h1>
-        {showForm ? (
-          <form>
-            {/* Input field for the user to enter the band name */}
+        {showForm && (
+          <form onSubmit={submitForm}>
             <div className="mb-3">
               <input
                 type="text"
@@ -150,53 +155,47 @@ export default function GameStart() {
                 onChange={(e) => setBandName(e.target.value)}
               />
             </div>
-            <ul className="flex">
-              {bandMembers.map((bandMember, index) => (
-                <div
-                  className={`card ${bandMember.isSelected ? 'bg-primary text-white' : ''}`}
-                  style={{ width: '18rem', margin: '10px', cursor: 'pointer' }}
-                  key={bandMember.id}
-                  onClick={() => toggleSelection(bandMember.id)}
-                >
-                  <img
-                    src={`${imageFolderPath}/${bandMember.name.replace(/\s+/g, '')}.png`}
-                    className="card-img-top"
-                    alt={bandMember.name}
-                  />
-                  <div className="card-body">
-                    <h5 className="card-title">{bandMember.name}</h5>
-                    <p className="card-text">{bandMember.type}</p>
-                    <p className="card-text">Member ID: {bandMember.id}</p>
-                    <p className="card-text">{bandMember.archetype}</p>
-                    <p className="card-text">{bandMember.archetypeDes}</p>
-                  </div>
-                  <button className="btn btn-primary mt-3" onClick={submitForm}>
-                    <h1>{index + 1}</h1>
-                  </button>
-                </div>
-              ))}
-            </ul>
+            <ul className="row">
+  {bandMembers.map((bandMember) => (
+    <div className="col-md-3 mb-3" key={bandMember.id}>
+      <div
+        className={`card ${bandMember.isSelected ? "bg-primary text-white" : ""}`}
+        style={{ cursor: "pointer" }}
+        onClick={() => toggleSelection(bandMember.id)}
+      >
+        <img src={`${imageFolderPath}/${bandMember.name.replace(/\s+/g, "")}.png`} className="card-img-top" alt={bandMember.name} />
+        <div className="card-body">
+          <h5 className="card-title">{bandMember.name}</h5>
+          <p className="card-text">{bandMember.type}</p>
+          <p className="card-text">Member ID: {bandMember.id}</p>
+          <p className="card-text">{bandMember.archetype}</p>
+          <p className="card-text">{bandMember.archetypeDes}</p>
+        </div>
+      </div>
+    </div>
+  ))}
+</ul>
+<div className="text-center">
+  <button className="btn btn-primary mt-3 w-50" type="submit">
+    <h1>Submit</h1>
+  </button>
+</div>
           </form>
-        ) : (
+        )}
+        {!showForm && (
           <div>
-            <div style={buttonContainerStyle}>
-              <button
-                className="btn btn-primary"
-                onClick={loadPreviousGameClickHandler}
-              >
+            <div className="d-grid gap-2">
+              <button className="btn btn-primary" onClick={loadPreviousGameClickHandler}>
                 <h1>Load Previous Game</h1>
               </button>
-              <button
-                className="btn btn-primary"
-                onClick={startGameClickHandler}
-              >
+              <button className="btn btn-primary" onClick={startGameClickHandler}>
                 <h1>Start Game</h1>
               </button>
             </div>
-            {showSavedGames && uniqueBandNames.length > 0 && ( // Conditionally render saved games
+            {showSavedGames && uniqueBandNames.length > 0 && (
               <div>
                 <h2 className="text-white mt-4 text-center">Select a saved game:</h2>
-                <div style={buttonContainerStyle}>
+                <div className="d-grid gap-2">
                   {uniqueBandNames.map((bandName, index) => (
                     <button
                       className="btn btn-primary"
@@ -215,6 +214,4 @@ export default function GameStart() {
     </div>
   );
 }
-
-
 
