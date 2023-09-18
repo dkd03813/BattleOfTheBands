@@ -31,8 +31,27 @@ router.post("/create", async (req, res) => {
 
     console.log("New User's auto-generated ID:", newProfile.id);
 
-    // Send a success response
-    res.status(201).json({ message: "User created successfully" });
+    // Find the newly created user
+    const user = await User.findOne({ where: { id: newProfile.id } });
+
+    // Generate a token for the newly created user
+    const userID = user.id;
+    const token = jwt.sign({ id: userID }, "superSecretPrivateKey", {
+      expiresIn: "1h",
+    });
+
+    // Send a success response along with the token
+    const userData = {
+      id: userID,
+      username: user.username, // You can add other user data here if needed
+    };
+
+    res.cookie("token", token);
+    res.status(201).json({
+      message: "User created successfully",
+      token,
+      user: userData,
+    });
   } catch (error) {
     console.log(error);
 
@@ -40,6 +59,8 @@ router.post("/create", async (req, res) => {
     res.status(500).json({ message: "User creation failed" });
   }
 });
+
+
 
 router.post("/login", async (req, res) => {
   try {
@@ -306,6 +327,36 @@ router.get("/game/practice/:bandName", async (req, res) => {
     const bandName = req.params.bandName; // Retrieve bandName from URL params
 
     const eventTypes = ["Practice"];
+    
+    // Query the database to find a random event of the specified types
+    const randomEvent = await Events.findOne({
+      where: {
+        eventType: eventTypes,
+      },
+      order: sequelize.fn('random'),
+    });
+
+    console.log("Random Event:", randomEvent); // Add this console log
+    
+    if (!randomEvent) {
+      return res.status(404).json({ message: 'No events found' });
+    }
+    
+    // Respond with the selected random event
+    res.json(randomEvent);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+
+//This route is for grabbing a random event that has the Concert Type
+router.get("/game/concert/:bandName", async (req, res) => {
+  try {
+    const bandName = req.params.bandName; // Retrieve bandName from URL params
+
+    const eventTypes = ["Concert"];
     
     // Query the database to find a random event of the specified types
     const randomEvent = await Events.findOne({

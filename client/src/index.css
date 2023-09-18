@@ -15,7 +15,15 @@ h1 {
   font-family: "pixelFont";
 }
 
-
+.alert-message {
+  background: linear-gradient(to bottom, #FFA7D1, #B19CD9);
+  color: #311C87;
+  padding: 10px;
+  border-radius: 15px;
+  font-family: Courier New, monospace;
+  font-size: 18px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
 /* 
 html {
   box-sizing: border-box;
