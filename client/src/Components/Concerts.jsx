@@ -144,9 +144,8 @@ export default function Concerts() {
           src={`${imageFolderPath}/Concert4.png`}
           alt="title"
           className="mx-auto"
-          style={{ width: "30%" }} // Adjust the width as needed
+          style={{ width: "25%" }} // Adjust the width as needed
         />
-        <h1 className="text-4xl my-6 text-white font-pixel">Highway to Harmony</h1>
         <div className="mb-3">
           <div style={cardStyle}>
             <h1 className="card-title" style={{ fontSize: "78px" }}>{concert.eventTitle}</h1>
