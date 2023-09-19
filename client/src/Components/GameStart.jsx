@@ -139,11 +139,13 @@ export default function GameStart() {
   return (
     <div className="bg-gray-900 scroll-smooth">
       <audio className="mx-12 mt-12" controls>
-        <source src={`${imageFolderPath}/8bit-music.mp3`} type="audio/mp3"></source>
+        <source src={`${imageFolderPath}/8bit-music.mp3` }  type="audio/mp3"></source>
       </audio>
       <div className="d-flex flex-column align-items-center justify-content-center h-100">
-        <img src={`${imageFolderPath}/HighwayHarmony2.png`} alt="title" className="object-scale-down w-40" />
-        <h1 className="mx-12 my-6 text-white">Highway to Harmony</h1>
+        <img src={`${imageFolderPath}/HighwayHarmony2.png`} alt="title"
+          className="mx-auto"
+          style={{ width: "30%" }}  />
+        <h1 className="mx-12 my-6 text-white" style={{ fontSize: "78px" }}>Highway to Harmony</h1>
         {showForm && (
           <form onSubmit={submitForm}>
             <div className="m-24">
@@ -159,7 +161,7 @@ export default function GameStart() {
   {bandMembers.map((bandMember) => (
     <div className="col-md-3 m-12" key={bandMember.id}>
       <div
-        className={`card ${bandMember.isSelected ? "bg-primary text-white" : ""}`}
+        className={`card ${bandMember.isSelected ? "bg-primary text-white" : "bg-dark text-white"}`}
         style={{ cursor: "pointer" }}
         onClick={() => toggleSelection(bandMember.id)}
       >
@@ -169,12 +171,12 @@ export default function GameStart() {
           <p className="card-text">{bandMember.type}</p>
           <p className="card-text">Member ID: {bandMember.id}</p>
           <p className="card-text">{bandMember.archetype}</p>
-          <p className="card-text">{bandMember.archetypeDes}</p>
         </div>
       </div>
     </div>
   ))}
 </ul>
+
 <div className="text-center">
   <button className="btn btn-primary mt-3 w-50 mb-32" type="submit">
     <h1>Submit</h1>
@@ -186,10 +188,10 @@ export default function GameStart() {
           <div>
             <div className="d-grid gap-2">
               <button className="btn btn-primary" onClick={loadPreviousGameClickHandler}>
-                <h1>Load Previous Game</h1>
+                <h1 style={{ fontSize: "78px" }}>Load Previous Game</h1>
               </button>
               <button className="btn btn-primary" onClick={startGameClickHandler}>
-                <h1>Start Game</h1>
+                <h1 style={{ fontSize: "78px" }}>Start Game</h1>
               </button>
             </div>
             {showSavedGames && uniqueBandNames.length > 0 && (

@@ -70,7 +70,7 @@ export default function Login() {
             </li>
             <li>
         <div>
-          <label htmlFor="password" className="text-white"><h1>Password:</h1></label>
+          <label htmlFor="password" className="text-white"><h1 >Password:</h1></label>
           <input
             type="password"
             id="password"

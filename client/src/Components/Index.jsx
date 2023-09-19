@@ -18,17 +18,17 @@ export default function Index() {
         <section className="bg-gray-900 items-center justify-center text-center  text-white">
           <ul className="list-none">
             <li>
-              <h1>Highway to Harmony</h1>
+              <h1 style={{ fontSize: "88px" }}>Highway to Harmony</h1>
               <Link to="/create">
                 <button>
-                  <h1 className="text-blue-400">Create Account</h1>
+                  <h1 className="text-blue-400" style={{ fontSize: "78px" }}>Create Account</h1>
                 </button>
               </Link>
             </li>
             <li>
               <Link to="/login">
                 <button>
-                  <h1>Login</h1>
+                  <h1 style={{ fontSize: "78px" }}>Login</h1>
                 </button>
               </Link>
             </li>
