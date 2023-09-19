@@ -131,8 +131,8 @@ export default function Account() {
         </div>
       ) : user ? (
         <div>
-          <p>User ID: {user.id}</p>
-          <p>Username: {user.username}</p>
+          <p className="text-white">User ID: {user.id}</p>
+          <p className="text-white">Username: {user.username}</p>
         </div>
       ) : (
         <p className="text-white m-12">Loading user data...</p>
