@@ -74,8 +74,8 @@ export default function GamePage() {
     padding: "10px 20px",
     fontFamily: "Courier New, monospace",
     fontSize: "18px", // Increased font size
-    background: "linear-gradient(to bottom, #FFA7D1, #B19CD9)", // Pastel pink and purple gradient background
-    color: "#311C87", // Darker text color
+    background: "linear-gradient(to bottom, #E8FFFF, #97FFF4)", // Pastel pink and purple gradient background
+    color: "#000000", // Darker text color
     border: "none",
     borderRadius: "15px",
     cursor: "pointer",
@@ -83,8 +83,8 @@ export default function GamePage() {
   };
 
   const retroStatsStyle = {
-    background: "linear-gradient(to bottom, #FFA7D1, #B19CD9)", // Background matches the button style
-    color: "#311C87", // Darker text color
+    background: "linear-gradient(to bottom, #E8FFFF, #97FFF4)", // Background matches the button style
+    color: "#000000", // Darker text color
     padding: "10px",
     borderRadius: "15px",
     marginTop: "10px",
@@ -142,16 +142,13 @@ export default function GamePage() {
     <div className="bg-gray-900 scroll-smooth">
       <div style={containerStyle} className="text-center">
         <img
-          src={`${imageFolderPath}/rock.png`}
+          src={`${imageFolderPath}/5.png`}
           alt="title"
           className="mx-auto"
-          style={{ width: "20%" }} // Adjust the width as needed
+          style={{ width: "80%" }} // Adjust the width as needed
         />
-        <h1 className="text-4xl my-6 text-white font-pixel">
-          Highway to Harmony
-        </h1>
         <div className="mb-3">
-          <div style={retroStatsStyle}>
+          <div className="m-12" style={retroStatsStyle}>
             <h2 style={retroStatItemStyle}>
               <h1>BAND NAME: {bandName}</h1>
             </h2>
