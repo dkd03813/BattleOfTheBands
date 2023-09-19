@@ -106,12 +106,14 @@ export default function Concerts() {
     alignItems: "center",
     justifyContent: "center",
     height: "100vh",
+    margin: "100px",
+    padding: '20px'
   };
 
   const cardStyle = {
-    background: "linear-gradient(to bottom, #FFA7D1, #B19CD9)",
-    color: "#311C87",
-    padding: "20px",
+    background: "linear-gradient(to bottom,  #FFA7D1, #B19CD9)",
+    color: "#000000",
+    padding: "40px",
     borderRadius: "15px",
     margin: "20px",
     fontFamily: "Courier New, monospace",

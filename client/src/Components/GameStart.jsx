@@ -146,7 +146,7 @@ export default function GameStart() {
         <h1 className="mx-12 my-6 text-white">Highway to Harmony</h1>
         {showForm && (
           <form onSubmit={submitForm}>
-            <div className="mb-3">
+            <div className="m-24">
               <input
                 type="text"
                 className="form-control"
@@ -155,9 +155,9 @@ export default function GameStart() {
                 onChange={(e) => setBandName(e.target.value)}
               />
             </div>
-            <ul className="row">
+            <ul className="row justify-center">
   {bandMembers.map((bandMember) => (
-    <div className="col-md-3 mb-3" key={bandMember.id}>
+    <div className="col-md-3 m-12" key={bandMember.id}>
       <div
         className={`card ${bandMember.isSelected ? "bg-primary text-white" : ""}`}
         style={{ cursor: "pointer" }}
@@ -176,7 +176,7 @@ export default function GameStart() {
   ))}
 </ul>
 <div className="text-center">
-  <button className="btn btn-primary mt-3 w-50" type="submit">
+  <button className="btn btn-primary mt-3 w-50 mb-32" type="submit">
     <h1>Submit</h1>
   </button>
 </div>
